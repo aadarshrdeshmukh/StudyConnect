@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Collaboration Platform</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
+
 <body>
     <header class="header">
         <div class="container">
@@ -57,7 +59,70 @@
         </div>
     </footer>
 
-    <script src="js/firebase-config.js" type="module"></script>
-    <script src="js/auth.js" type="module"></script>
+    <!-- Firebase CDN Scripts - Load Firebase from CDN [web:35] -->
+    <script type="module">
+        // Import Firebase SDK from CDN
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+        // Your Firebase configuration (replace with your actual values)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbf_X1WX67FhXiPJWDSLchiG6eDjR7JsM",
+            authDomain: "student-collaboration-pl-37e06.firebaseapp.com",
+            projectId: "student-collaboration-pl-37e06",
+            storageBucket: "student-collaboration-pl-37e06.firebasestorage.app",
+            messagingSenderId: "648204798579",
+            appId: "1:648204798579:web:041b586930f18dcbfc3806",
+            measurementId: "G-72358XSZVY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make Firebase available globally
+        window.firebaseApp = app;
+        window.firebaseAuth = auth;
+        window.firebaseDB = db;
+
+        // Make Firebase functions available globally
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signOut = signOut;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.getDoc = getDoc;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.query = query;
+        window.where = where;
+        window.getDocs = getDocs;
+        window.onSnapshot = onSnapshot;
+        window.orderBy = orderBy;
+        window.limit = limit;
+
+        console.log('✅ Firebase initialized successfully from CDN');
+
+        // Development environment detection
+        if (window.location.hostname === 'localhost') {
+            console.log('🔧 Running in development mode');
+        }
+
+        // Basic auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('👤 User is signed in:', user.email);
+            } else {
+                console.log('👤 User is signed out');
+            }
+        });
+    </script>
+
+    <!-- Load your custom JavaScript after Firebase -->
+    <script src="js/firebase-config.js"></script>
 </body>
+
 </html>

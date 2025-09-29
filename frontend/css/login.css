@@ -1,0 +1,112 @@
+/* Login Page Specific Styles */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.login-form {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-form h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.login-form h3 {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-weight: normal;
+    font-size: 1.1rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e8f4f8;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.form-group input:invalid {
+    border-color: #e74c3c;
+}
+
+.btn-large {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.form-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.form-links p {
+    margin: 10px 0;
+    color: #7f8c8d;
+}
+
+.form-links a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.form-links a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    color: #e53e3e;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.success-message {
+    background: #f0fff4;
+    border: 1px solid #c6f6d5;
+    color: #25543e;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-form {
+        padding: 30px 20px;
+    }
+}

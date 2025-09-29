@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - StudyConnect</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-form">
+            <h2>🎓 StudyConnect</h2>
+            <h3>Login to Your Account</h3>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">College Email</label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@college.edu.in">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large">Login</button>
+            </form>
+            
+            <div class="form-links">
+                <p>Don't have an account? <a href="register.html">Register here</a></p>
+                <p><a href="index.html">Back to Home</a></p>
+            </div>
+            
+            <div id="error-message" class="error-message" style="display:none;"></div>
+            <div id="success-message" class="success-message" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Firebase CDN Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbf_X1WX67FhXiPJWDSLchiG6eDjR7JsM",
+            authDomain: "student-collaboration-pl-37e06.firebaseapp.com",
+            projectId: "student-collaboration-pl-37e06",
+            storageBucket: "student-collaboration-pl-37e06.firebasestorage.app",
+            messagingSenderId: "648204798579",
+            appId: "1:648204798579:web:041b586930f18dcbfc3806",
+            measurementId: "G-72358XSZVY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        console.log('✅ Firebase initialized on login page');
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            
+            // Hide previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            try {
+                // Sign in with Firebase Auth
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                console.log('✅ Login successful:', user.email);
+                
+                successMessage.textContent = 'Login successful! Redirecting...';
+                successMessage.style.display = 'block';
+                
+                // Redirect to dashboard after successful login
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                console.error('❌ Login error:', error);
+                
+                let errorText = 'Login failed. Please try again.';
+                
+                // Handle specific error cases
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorText = 'No account found with this email.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorText = 'Incorrect password.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorText = 'Invalid email address.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorText = 'Too many failed attempts. Please try again later.';
+                        break;
+                }
+                
+                errorMessage.textContent = errorText;
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // Check if user is already logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('👤 User already logged in, redirecting to dashboard');
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

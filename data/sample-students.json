@@ -1,0 +1,52 @@
+[
+  {
+    "personalInfo": {
+      "fullName": "Rajesh Kumar",
+      "collegeEmail": "rajesh.kumar@college.edu.in",
+      "rollNumber": "CS2023001"
+    },
+    "academicDetails": {
+      "stream": "Computer Science",
+      "cohort": "Class of 2026",
+      "currentYear": "2nd Year"
+    },
+    "skillsInterests": {
+      "mainSkills": ["Web Development (HTML, CSS, JS)", "Backend & Databases (Python, Node.js, SQL)"],
+      "portfolioLink": "https://github.com/rajeshkumar"
+    },
+    "collaborationPrefs": {
+      "streamBased": true,
+      "crossStream": true,
+      "activeProjects": [],
+      "interestedInNewProjects": true
+    },
+    "firebaseUID": null,
+    "isOnline": false,
+    "profileComplete": true
+  },
+  {
+    "personalInfo": {
+      "fullName": "Priya Sharma",
+      "collegeEmail": "priya.sharma@college.edu.in",
+      "rollNumber": "IT2023045"
+    },
+    "academicDetails": {
+      "stream": "Information Technology",
+      "cohort": "Class of 2026",
+      "currentYear": "2nd Year"
+    },
+    "skillsInterests": {
+      "mainSkills": ["UI/UX Design (Figma)", "App Development (Java, Kotlin, Flutter)"],
+      "portfolioLink": "https://dribbble.com/priyasharma"
+    },
+    "collaborationPrefs": {
+      "streamBased": true,
+      "crossStream": true,
+      "activeProjects": [],
+      "interestedInNewProjects": true
+    },
+    "firebaseUID": null,
+    "isOnline": false,
+    "profileComplete": true
+  }
+]

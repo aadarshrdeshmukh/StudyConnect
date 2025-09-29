@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
+    "init-db": "node backend/scripts/initDatabase.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["student", "collaboration", "chat", "firebase", "mongodb"],
