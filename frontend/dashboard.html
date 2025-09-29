@@ -6,15 +6,20 @@
     <title>Dashboard - StudyConnect</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/chat.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">🎓 StudyConnect</div>
             <div class="nav-menu">
-                <a href="#profile" class="nav-link">Profile</a>
-                <a href="#peers" class="nav-link">Peers</a>
-                <a href="#chat" class="nav-link">Chat</a>
+                <a href="#profile" class="nav-link" onclick="showSection('profile')">Profile</a>
+                <a href="#peers" class="nav-link" onclick="showSection('peers')">Peers</a>
+                <a href="#chat" class="nav-link" onclick="showSection('chat')">Chat</a>
+                <div class="user-info">
+                    <span id="navUserName">Loading...</span>
+                    <div class="user-status" id="userStatus"></div>
+                </div>
                 <button id="logoutBtn" class="btn btn-secondary">Logout</button>
             </div>
         </div>
@@ -37,6 +42,10 @@
                         <div class="stat-item">
                             <span class="stat-number" id="onlinePeersCount">-</span>
                             <span class="stat-label">Online Now</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="activeChatRooms">-</span>
+                            <span class="stat-label">Active Chats</span>
                         </div>
                     </div>
                 </div>
@@ -129,22 +138,90 @@
                 <section id="chatSection" class="content-section" style="display:none;">
                     <div class="section-header">
                         <h3>💬 Chat Rooms</h3>
-                        <button id="createRoomBtn" class="btn btn-primary">Create Room</button>
+                        <div class="chat-controls">
+                            <select id="streamChatFilter">
+                                <option value="">All Streams</option>
+                                <option value="Computer Science">CS Only</option>
+                                <option value="Information Technology">IT Only</option>
+                                <option value="Electronics & Telecommunication">ECE Only</option>
+                            </select>
+                            <button id="createRoomBtn" class="btn btn-primary">+ Create Room</button>
+                        </div>
                     </div>
-                    <div class="chat-container">
+                    
+                    <div class="chat-layout">
+                        <!-- Chat Rooms Sidebar -->
                         <div class="chat-sidebar">
-                            <h4>Available Rooms</h4>
-                            <div id="chatRoomsList">
-                                <!-- Chat rooms will be loaded here -->
+                            <div class="sidebar-section">
+                                <h4>Available Rooms</h4>
+                                <div id="chatRoomsList" class="chat-rooms-list">
+                                    <!-- Chat rooms will be loaded here -->
+                                </div>
+                            </div>
+                            
+                            <div class="sidebar-section">
+                                <h4>Online Users <span id="onlineCount" class="online-badge">0</span></h4>
+                                <div id="onlineUsersList" class="online-users-list">
+                                    <!-- Online users will be loaded here -->
+                                </div>
                             </div>
                         </div>
+                        
+                        <!-- Chat Main Area -->
                         <div class="chat-main">
-                            <div id="chatMessages">
-                                <p>Select a chat room to start messaging</p>
+                            <div id="chatWelcome" class="chat-welcome">
+                                <div class="welcome-content">
+                                    <div class="chat-welcome-icon">💬</div>
+                                    <h3>Welcome to StudyConnect Chat!</h3>
+                                    <p>Select a chat room to start messaging with your peers, or create a new room to begin discussions.</p>
+                                    <div class="quick-rooms">
+                                        <button class="quick-room-btn" onclick="createDefaultRooms()">
+                                            🌐 Create General Room
+                                        </button>
+                                        <button class="quick-room-btn" onclick="createStreamRoom()">
+                                            🎓 Create Stream Room
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="chat-input" style="display:none;">
-                                <input type="text" id="messageInput" placeholder="Type your message...">
-                                <button id="sendMessageBtn" class="btn btn-primary">Send</button>
+                            
+                            <div id="chatActive" class="chat-active" style="display:none;">
+                                <!-- Chat Header -->
+                                <div class="chat-header">
+                                    <div class="chat-room-info">
+                                        <h4 id="currentRoomName">Room Name</h4>
+                                        <span id="currentRoomParticipants" class="participants-count">0 participants</span>
+                                    </div>
+                                    <div class="chat-actions">
+                                        <button id="chatSettingsBtn" class="btn btn-sm btn-secondary">⚙️</button>
+                                        <button id="leaveChatBtn" class="btn btn-sm btn-secondary">🚪 Leave</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Messages Area -->
+                                <div id="chatMessages" class="chat-messages">
+                                    <!-- Messages will appear here -->
+                                </div>
+                                
+                                <!-- Message Input -->
+                                <div class="chat-input-area">
+                                    <div class="message-input-container">
+                                        <input 
+                                            type="text" 
+                                            id="messageInput" 
+                                            class="message-input"
+                                            placeholder="Type your message... (Press Enter to send)"
+                                            maxlength="500"
+                                        >
+                                        <button id="sendMessageBtn" class="btn btn-primary send-btn">
+                                            📤
+                                        </button>
+                                    </div>
+                                    <div class="typing-indicator" id="typingIndicator" style="display:none;">
+                                        <span class="typing-dots"></span>
+                                        Someone is typing...
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,6 +230,60 @@
             </div>
         </div>
     </main>
+
+    <!-- Create Room Modal -->
+    <div id="createRoomModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Chat Room</h3>
+                <button class="modal-close" onclick="closeCreateRoomModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createRoomForm">
+                    <div class="form-group">
+                        <label for="roomName">Room Name</label>
+                        <input type="text" id="roomName" name="roomName" required maxlength="50"
+                               placeholder="e.g., CS Project Discussions">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roomDescription">Description (Optional)</label>
+                        <textarea id="roomDescription" name="roomDescription" maxlength="200"
+                                  placeholder="What is this room for?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roomType">Room Type</label>
+                        <select id="roomType" name="roomType" required>
+                            <option value="general">General Discussion</option>
+                            <option value="stream">Stream Specific</option>
+                            <option value="study">Study Group</option>
+                            <option value="project">Project Collaboration</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="streamGroup" style="display:none;">
+                        <label for="roomStream">Select Stream</label>
+                        <select id="roomStream" name="roomStream">
+                            <option value="">Choose Stream</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Electronics & Telecommunication">Electronics & Telecommunication</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateRoomModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Create Room
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Loading overlay -->
     <div id="loadingOverlay" class="loading-overlay">
@@ -163,7 +294,22 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-        import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            query, 
+            orderBy, 
+            limit, 
+            onSnapshot, 
+            addDoc, 
+            updateDoc, 
+            setDoc, 
+            serverTimestamp,
+            where,
+            getDocs,
+            increment
+        } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
         // Your Firebase configuration (replace with actual values)
         const firebaseConfig = {
@@ -187,6 +333,19 @@
         let currentUser = null;
         let currentUserProfile = null;
         let authToken = null;
+        let currentChatRoom = null;
+        let messageListener = null;
+        let onlineUsersListener = null;
+        let roomsListener = null;
+
+        // Chat state
+        const chatState = {
+            currentRoomId: null,
+            currentRoomData: null,
+            messages: [],
+            onlineUsers: [],
+            unsubscribers: []
+        };
 
         // Show loading overlay
         function showLoading(show = true) {
@@ -214,6 +373,26 @@
             return data;
         }
 
+        // Update user presence
+        async function updatePresence(isOnline = true) {
+            try {
+                const presenceRef = doc(db, 'presence', currentUser.uid);
+                await setDoc(presenceRef, {
+                    uid: currentUser.uid,
+                    email: currentUser.email,
+                    displayName: currentUserProfile?.personalInfo?.fullName || currentUser.email,
+                    stream: currentUserProfile?.academicDetails?.stream || 'Unknown',
+                    isOnline: isOnline,
+                    lastSeen: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+                
+                console.log(`👤 Presence updated: ${isOnline ? 'online' : 'offline'}`);
+            } catch (error) {
+                console.error('❌ Error updating presence:', error);
+            }
+        }
+
         // Load user profile
         async function loadUserProfile() {
             try {
@@ -223,9 +402,13 @@
                 
                 // Update welcome message
                 document.getElementById('userName').textContent = currentUserProfile.personalInfo.fullName;
+                document.getElementById('navUserName').textContent = currentUserProfile.personalInfo.fullName;
                 document.getElementById('userStream').textContent = 
                     `${currentUserProfile.academicDetails.stream} • ${currentUserProfile.academicDetails.currentYear}`;
 
+                // Update user presence in Firestore
+                await updatePresence(true);
+                
                 // Load peers count
                 await loadStreamPeersCount();
                 
@@ -276,11 +459,508 @@
                         loadProfileSection();
                         break;
                     case 'chat':
-                        loadChatRooms();
+                        initChatSection();
                         break;
                 }
             }
         };
+
+        // ===== CHAT FUNCTIONALITY =====
+
+        // Initialize chat section
+        async function initChatSection() {
+            console.log('💬 Initializing chat section');
+            
+            // Listen to chat rooms
+            listenToChatRooms();
+            
+            // Listen to online users
+            listenToOnlineUsers();
+            
+            // Load initial room count
+            await loadChatRoomsCount();
+        }
+
+        // Listen to chat rooms in real-time
+        function listenToChatRooms(streamFilter = null) {
+            // Clean up existing listener
+            if (roomsListener) {
+                roomsListener();
+            }
+
+            let q = query(
+                collection(db, 'chatRooms'),
+                orderBy('lastActivity', 'desc'),
+                limit(20)
+            );
+            
+            if (streamFilter) {
+                q = query(
+                    collection(db, 'chatRooms'),
+                    where('stream', '==', streamFilter),
+                    orderBy('lastActivity', 'desc'),
+                    limit(20)
+                );
+            }
+            
+            roomsListener = onSnapshot(q, (snapshot) => {
+                const rooms = [];
+                snapshot.forEach((doc) => {
+                    rooms.push({
+                        id: doc.id,
+                        ...doc.data(),
+                        createdAt: doc.data().createdAt?.toDate(),
+                        lastActivity: doc.data().lastActivity?.toDate()
+                    });
+                });
+                
+                displayChatRooms(rooms);
+                document.getElementById('activeChatRooms').textContent = rooms.length;
+            }, (error) => {
+                console.error('❌ Error listening to chat rooms:', error);
+            });
+        }
+
+        // Display chat rooms in sidebar
+        function displayChatRooms(rooms) {
+            const roomsList = document.getElementById('chatRoomsList');
+            
+            if (rooms.length === 0) {
+                roomsList.innerHTML = `
+                    <div class="no-rooms">
+                        <p>No chat rooms available</p>
+                        <button class="btn btn-sm btn-primary" onclick="showCreateRoomModal()">
+                            Create First Room
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            roomsList.innerHTML = rooms.map(room => {
+                const isActive = chatState.currentRoomId === room.id;
+                const lastActivity = room.lastActivity ? formatTimestamp(room.lastActivity) : 'New';
+                const participantCount = room.participants ? room.participants.length : 0;
+                
+                return `
+                    <div class="chat-room ${isActive ? 'active' : ''}" 
+                         onclick="selectChatRoom('${room.id}', '${room.name}', ${JSON.stringify(room).replace(/"/g, '&quot;')})">
+                        <div class="room-header">
+                            <div class="room-name">${getRoomIcon(room.type)} ${room.name}</div>
+                            <div class="room-time">${lastActivity}</div>
+                        </div>
+                        <div class="room-info">
+                            <span class="participants">${participantCount} members</span>
+                            ${room.stream ? `<span class="room-stream">• ${room.stream}</span>` : ''}
+                        </div>
+                        ${room.description ? `<div class="room-description">${room.description}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Get room icon based on type
+        function getRoomIcon(type) {
+            const icons = {
+                'general': '🌐',
+                'stream': '🎓',
+                'study': '📚',
+                'project': '🚀'
+            };
+            return icons[type] || '💬';
+        }
+
+        // Listen to online users
+        function listenToOnlineUsers() {
+            if (onlineUsersListener) {
+                onlineUsersListener();
+            }
+
+            const presenceRef = collection(db, 'presence');
+            const q = query(presenceRef, where('isOnline', '==', true));
+            
+            onlineUsersListener = onSnapshot(q, (snapshot) => {
+                const onlineUsers = [];
+                snapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    if (userData.uid !== currentUser.uid) { // Exclude current user
+                        onlineUsers.push({
+                            ...userData,
+                            lastSeen: userData.lastSeen?.toDate()
+                        });
+                    }
+                });
+                
+                displayOnlineUsers(onlineUsers);
+                document.getElementById('onlineCount').textContent = onlineUsers.length;
+            });
+        }
+
+        // Display online users
+        function displayOnlineUsers(users) {
+            const usersList = document.getElementById('onlineUsersList');
+            
+            if (users.length === 0) {
+                usersList.innerHTML = '<div class="no-users">No other users online</div>';
+                return;
+            }
+            
+            usersList.innerHTML = users.map(user => `
+                <div class="online-user">
+                    <div class="user-avatar">${user.displayName.charAt(0).toUpperCase()}</div>
+                    <div class="user-info">
+                        <div class="user-name">${user.displayName}</div>
+                        <div class="user-stream">${user.stream || 'Unknown'}</div>
+                    </div>
+                    <div class="user-status online">🟢</div>
+                </div>
+            `).join('');
+        }
+
+        // Select and join a chat room
+        window.selectChatRoom = async function(roomId, roomName, roomData) {
+            try {
+                // Leave current room first
+                if (chatState.currentRoomId) {
+                    await leaveChatRoom();
+                }
+
+                // Update UI to show active chat
+                document.getElementById('chatWelcome').style.display = 'none';
+                document.getElementById('chatActive').style.display = 'flex';
+                
+                // Update room info
+                document.getElementById('currentRoomName').textContent = roomName;
+                document.getElementById('currentRoomParticipants').textContent = 
+                    `${roomData.participants?.length || 0} participants`;
+                
+                // Set current room
+                chatState.currentRoomId = roomId;
+                chatState.currentRoomData = roomData;
+                
+                // Update room participant list
+                await updateRoomParticipants(roomId);
+                
+                // Listen to messages
+                listenToMessages(roomId);
+                
+                // Update room list active state
+                document.querySelectorAll('.chat-room').forEach(room => {
+                    room.classList.remove('active');
+                });
+                document.querySelector(`[onclick*="${roomId}"]`)?.classList.add('active');
+                
+                console.log('💬 Joined chat room:', roomName);
+            } catch (error) {
+                console.error('❌ Error selecting chat room:', error);
+                alert('Failed to join chat room. Please try again.');
+            }
+        };
+
+        // Update room participants
+        async function updateRoomParticipants(roomId) {
+            try {
+                const roomRef = doc(db, 'chatRooms', roomId);
+                await updateDoc(roomRef, {
+                    participants: [currentUser.uid], // This should be properly merged
+                    lastActivity: serverTimestamp()
+                });
+            } catch (error) {
+                console.error('❌ Error updating room participants:', error);
+            }
+        }
+
+        // Listen to messages in a room
+        function listenToMessages(roomId) {
+            // Clean up existing message listener
+            if (messageListener) {
+                messageListener();
+            }
+
+            const messagesRef = collection(db, 'chatRooms', roomId, 'messages');
+            const q = query(messagesRef, orderBy('timestamp', 'desc'), limit(50));
+            
+            messageListener = onSnapshot(q, (snapshot) => {
+                const messages = [];
+                snapshot.forEach((doc) => {
+                    messages.push({
+                        id: doc.id,
+                        ...doc.data(),
+                        timestamp: doc.data().timestamp?.toDate()
+                    });
+                });
+                
+                // Reverse to show oldest first
+                messages.reverse();
+                chatState.messages = messages;
+                displayMessages(messages);
+                
+                // Scroll to bottom
+                scrollToBottomOfChat();
+            }, (error) => {
+                console.error('❌ Error listening to messages:', error);
+            });
+        }
+
+        // Display messages in chat
+        function displayMessages(messages) {
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            if (messages.length === 0) {
+                messagesContainer.innerHTML = `
+                    <div class="no-messages">
+                        <p>No messages yet. Be the first to start the conversation!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let lastSender = null;
+            let lastDate = null;
+            
+            messagesContainer.innerHTML = messages.map(message => {
+                const isOwnMessage = message.senderId === currentUser.uid;
+                const messageDate = message.timestamp ? message.timestamp.toDateString() : '';
+                const messageTime = message.timestamp ? formatTime(message.timestamp) : '';
+                const showSender = lastSender !== message.senderId;
+                const showDate = lastDate !== messageDate;
+                
+                lastSender = message.senderId;
+                lastDate = messageDate;
+                
+                let html = '';
+                
+                // Show date separator
+                if (showDate && messageDate) {
+                    html += `<div class="date-separator">${messageDate}</div>`;
+                }
+                
+                // Show message
+                html += `
+                    <div class="message ${isOwnMessage ? 'own-message' : 'other-message'} ${showSender ? 'new-sender' : ''}">
+                        ${showSender && !isOwnMessage ? `<div class="message-sender">${message.senderName}</div>` : ''}
+                        <div class="message-content">
+                            <div class="message-text">${escapeHtml(message.text)}</div>
+                            <div class="message-time">${messageTime}</div>
+                        </div>
+                    </div>
+                `;
+                
+                return html;
+            }).join('');
+        }
+
+        // Send a message
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const messageText = messageInput.value.trim();
+            
+            if (!messageText || !chatState.currentRoomId) {
+                return;
+            }
+            
+            try {
+                const messagesRef = collection(db, 'chatRooms', chatState.currentRoomId, 'messages');
+                await addDoc(messagesRef, {
+                    text: messageText,
+                    senderId: currentUser.uid,
+                    senderName: currentUserProfile?.personalInfo?.fullName || currentUser.email,
+                    senderEmail: currentUser.email,
+                    type: 'text',
+                    timestamp: serverTimestamp(),
+                    edited: false
+                });
+                
+                // Update room's last activity
+                const roomRef = doc(db, 'chatRooms', chatState.currentRoomId);
+                await updateDoc(roomRef, {
+                    lastActivity: serverTimestamp(),
+                    messageCount: increment(1)
+                });
+                
+                // Clear input
+                messageInput.value = '';
+                
+                console.log('📤 Message sent');
+            } catch (error) {
+                console.error('❌ Error sending message:', error);
+                alert('Failed to send message. Please try again.');
+            }
+        }
+
+        // Leave current chat room
+        async function leaveChatRoom() {
+            if (messageListener) {
+                messageListener();
+                messageListener = null;
+            }
+            
+            chatState.currentRoomId = null;
+            chatState.currentRoomData = null;
+            chatState.messages = [];
+            
+            // Update UI
+            document.getElementById('chatWelcome').style.display = 'flex';
+            document.getElementById('chatActive').style.display = 'none';
+            
+            // Update room list
+            document.querySelectorAll('.chat-room').forEach(room => {
+                room.classList.remove('active');
+            });
+        }
+
+        // Create room modal functions
+        window.showCreateRoomModal = function() {
+            document.getElementById('createRoomModal').style.display = 'flex';
+        };
+
+        window.closeCreateRoomModal = function() {
+            document.getElementById('createRoomModal').style.display = 'none';
+            document.getElementById('createRoomForm').reset();
+            document.getElementById('streamGroup').style.display = 'none';
+        };
+
+        // Create default rooms
+        window.createDefaultRooms = function() {
+            document.getElementById('roomName').value = 'General Discussion';
+            document.getElementById('roomDescription').value = 'Open discussion for all students';
+            document.getElementById('roomType').value = 'general';
+            showCreateRoomModal();
+        };
+
+        window.createStreamRoom = function() {
+            document.getElementById('roomName').value = `${currentUserProfile?.academicDetails?.stream || 'Stream'} Students`;
+            document.getElementById('roomDescription').value = `Discussions for ${currentUserProfile?.academicDetails?.stream || 'stream'} students`;
+            document.getElementById('roomType').value = 'stream';
+            document.getElementById('roomStream').value = currentUserProfile?.academicDetails?.stream || '';
+            document.getElementById('streamGroup').style.display = 'block';
+            showCreateRoomModal();
+        };
+
+        // Handle room type change
+        document.getElementById('roomType').addEventListener('change', function() {
+            const streamGroup = document.getElementById('streamGroup');
+            if (this.value === 'stream') {
+                streamGroup.style.display = 'block';
+                document.getElementById('roomStream').required = true;
+            } else {
+                streamGroup.style.display = 'none';
+                document.getElementById('roomStream').required = false;
+            }
+        });
+
+        // Handle create room form submission
+        document.getElementById('createRoomForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const roomData = {
+                name: formData.get('roomName'),
+                description: formData.get('roomDescription') || '',
+                type: formData.get('roomType'),
+                stream: formData.get('roomStream') || null
+            };
+            
+            try {
+                showLoading(true);
+                
+                const roomsRef = collection(db, 'chatRooms');
+                const newRoom = {
+                    name: roomData.name,
+                    description: roomData.description,
+                    type: roomData.type,
+                    stream: roomData.stream,
+                    participants: [currentUser.uid],
+                    moderators: [currentUser.uid],
+                    createdBy: currentUser.uid,
+                    createdAt: serverTimestamp(),
+                    lastActivity: serverTimestamp(),
+                    messageCount: 0,
+                    isActive: true
+                };
+                
+                const docRef = await addDoc(roomsRef, newRoom);
+                console.log('✅ Chat room created:', docRef.id);
+                
+                closeCreateRoomModal();
+                
+                // Auto-join the newly created room
+                setTimeout(() => {
+                    selectChatRoom(docRef.id, roomData.name, newRoom);
+                }, 500);
+                
+            } catch (error) {
+                console.error('❌ Error creating room:', error);
+                alert('Failed to create room. Please try again.');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Message input event handlers
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+
+        // Leave chat button
+        document.getElementById('leaveChatBtn').addEventListener('click', leaveChatRoom);
+
+        // Stream filter change
+        document.getElementById('streamChatFilter').addEventListener('change', function() {
+            const streamFilter = this.value;
+            listenToChatRooms(streamFilter);
+        });
+
+        // Utility functions
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return '';
+            
+            const now = new Date();
+            const messageTime = new Date(timestamp);
+            const diffInMinutes = Math.floor((now - messageTime) / (1000 * 60));
+            
+            if (diffInMinutes < 1) return 'Just now';
+            if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+            if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+            
+            return messageTime.toLocaleDateString();
+        }
+
+        function formatTime(timestamp) {
+            if (!timestamp) return '';
+            return new Date(timestamp).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function scrollToBottomOfChat() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        async function loadChatRoomsCount() {
+            try {
+                const roomsRef = collection(db, 'chatRooms');
+                const snapshot = await getDocs(roomsRef);
+                document.getElementById('activeChatRooms').textContent = snapshot.size;
+            } catch (error) {
+                console.error('❌ Error loading rooms count:', error);
+            }
+        }
+
+        // ===== EXISTING FUNCTIONALITY (Peers, Profile, etc.) =====
 
         // Load stream peers
         async function loadStreamPeers() {
@@ -310,7 +990,7 @@
                             </div>
                         </div>
                         <div class="peer-actions">
-                            <button class="btn btn-sm btn-primary" onclick="startChat('${peer._id}', '${peer.personalInfo.fullName}')">
+                            <button class="btn btn-sm btn-primary" onclick="startDirectChat('${peer._id}', '${peer.personalInfo.fullName}')">
                                 💬 Chat
                             </button>
                         </div>
@@ -366,7 +1046,7 @@
                             </div>
                         </div>
                         <div class="peer-actions">
-                            <button class="btn btn-sm btn-primary" onclick="startChat('${peer._id}', '${peer.personalInfo.fullName}')">
+                            <button class="btn btn-sm btn-primary" onclick="startDirectChat('${peer._id}', '${peer.personalInfo.fullName}')">
                                 💬 Chat
                             </button>
                         </div>
@@ -413,29 +1093,34 @@
             `;
         }
 
-        // Chat functionality (placeholder)
-        window.startChat = function(peerId, peerName) {
-            alert(`Starting chat with ${peerName} - Chat feature will be implemented in the next phase!`);
+        // Start direct chat with a peer
+        window.startDirectChat = async function(peerId, peerName) {
+            // Create or find direct chat room
+            const roomName = `Direct: ${peerName}`;
+            
+            try {
+                // Switch to chat section
+                showSection('chat');
+                
+                // For now, show alert - you could implement direct messaging
+                alert(`Direct messaging with ${peerName} will be available soon! For now, try creating a project room and inviting them.`);
+                
+            } catch (error) {
+                console.error('❌ Error starting direct chat:', error);
+            }
         };
-
-        // Load chat rooms (placeholder)
-        function loadChatRooms() {
-            document.getElementById('chatRoomsList').innerHTML = `
-                <div class="chat-room" onclick="selectChatRoom('general')">
-                    <div class="room-name">🌐 General Discussion</div>
-                    <div class="room-info">5 members online</div>
-                </div>
-                <div class="chat-room" onclick="selectChatRoom('cs')">
-                    <div class="room-name">💻 Computer Science</div>
-                    <div class="room-info">3 members online</div>
-                </div>
-                <p class="coming-soon">Real-time chat coming soon!</p>
-            `;
-        }
 
         // Logout functionality
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             try {
+                // Update presence to offline
+                await updatePresence(false);
+                
+                // Clean up chat listeners
+                if (messageListener) messageListener();
+                if (onlineUsersListener) onlineUsersListener();
+                if (roomsListener) roomsListener();
+                
                 await signOut(auth);
                 console.log('✅ User signed out');
                 window.location.href = '/';
@@ -458,9 +1143,26 @@
                 // Default to peers section
                 showSection('peers');
                 
+                // Set up presence heartbeat
+                setInterval(() => updatePresence(true), 30000); // Update every 30 seconds
+                
             } else {
                 console.log('👤 User is signed out, redirecting to login');
                 window.location.href = '/login';
+            }
+        });
+
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (currentUser) {
+                updatePresence(!document.hidden);
+            }
+        });
+
+        // Handle page unload
+        window.addEventListener('beforeunload', () => {
+            if (currentUser) {
+                updatePresence(false);
             }
         });
 
