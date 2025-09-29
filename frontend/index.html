@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Collaboration Platform</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎓 StudyConnect</h1>
+            <nav class="nav">
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+                <button id="registerBtn" class="btn btn-secondary">Register</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h2>Connect. Collaborate. Create.</h2>
+                <p>Join your peers from the same stream and collaborate on amazing projects together.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-large btn-primary" onclick="window.location.href='login.html'">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h3>Platform Features</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🏫 Stream-Based Matching</h4>
+                        <p>Connect with students from your academic stream</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💬 Real-time Chat</h4>
+                        <p>Instant messaging for seamless collaboration</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🤝 Cross-Stream Projects</h4>
+                        <p>Collaborate across different academic disciplines</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 StudyConnect. Built for student collaboration.</p>
+        </div>
+    </footer>
+
+    <script src="js/firebase-config.js" type="module"></script>
+    <script src="js/auth.js" type="module"></script>
+</body>
+</html>

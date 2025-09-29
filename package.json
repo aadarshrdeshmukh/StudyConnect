@@ -1,0 +1,25 @@
+{
+  "name": "student-collaboration-platform",
+  "version": "1.0.0",
+  "description": "A platform for student collaboration with real-time chat",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["student", "collaboration", "chat", "firebase", "mongodb"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongodb": "^6.20.0",
+    "firebase-admin": "^12.4.0",
+    "firebase": "^12.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
