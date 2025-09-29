@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - StudyConnect</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/register.css">
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="register-form">
+            <h2>🎓 StudyConnect</h2>
+            <h3>Create Your Account</h3>
+
+            <!-- Step 1: Basic Account -->
+            <div id="step1" class="form-step active">
+                <h4>Step 1: Account Information</h4>
+                <form id="basicAccountForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" required
+                                placeholder="Enter your full name">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="collegeEmail">College Email Address</label>
+                            <input type="email" id="collegeEmail" name="collegeEmail" required
+                                placeholder="your.email@college.edu.in">
+                            <small>Use your official college email address</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="rollNumber">Roll Number / Student ID</label>
+                            <input type="text" id="rollNumber" name="rollNumber" required placeholder="e.g., CS2023001">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required
+                                placeholder="Create a strong password">
+                            <small>At least 6 characters</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required
+                                placeholder="Confirm your password">
+                        </div>
+                    </div>
+
+                    <button type="button" id="nextStep1" class="btn btn-primary btn-large">Continue to Academic
+                        Details</button>
+                </form>
+            </div>
+
+            <!-- Step 2: Academic Details -->
+            <div id="step2" class="form-step">
+                <h4>Step 2: Academic Information</h4>
+                <form id="academicDetailsForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="stream">Stream / Branch of Study</label>
+                            <select id="stream" name="stream" required>
+                                <option value="">Select your stream</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics & Telecommunication">Electronics & Telecommunication</option>
+                                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                <option value="Civil Engineering">Civil Engineering</option>
+                                <option value="Electrical Engineering">Electrical Engineering</option>
+                                <option value="Chemical Engineering">Chemical Engineering</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cohort">Cohort / Batch Name</label>
+                            <input type="text" id="cohort" name="cohort" required
+                                placeholder="e.g., Class of 2026, Fall 2023 Batch">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="currentYear">Current Year of Study</label>
+                            <select id="currentYear" name="currentYear" required>
+                                <option value="">Select your year</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" id="backStep1" class="btn btn-secondary">Back</button>
+                        <button type="button" id="nextStep2" class="btn btn-primary">Continue to Skills</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Skills & Interests -->
+            <div id="step3" class="form-step">
+                <h4>Step 3: Skills & Interests</h4>
+                <form id="skillsInterestsForm">
+                    <div class="form-group">
+                        <label>My Main Skills Are... (Select all that apply)</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mainSkills" value="Web Development (HTML, CSS, JS)">
+                                <span>Web Development (HTML, CSS, JS)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mainSkills"
+                                    value="App Development (Java, Kotlin, Flutter)">
+                                <span>App Development (Java, Kotlin, Flutter)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mainSkills"
+                                    value="Backend & Databases (Python, Node.js, SQL)">
+                                <span>Backend & Databases (Python, Node.js, SQL)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mainSkills" value="AI / Machine Learning">
+                                <span>AI / Machine Learning</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mainSkills" value="UI/UX Design (Figma)">
+                                <span>UI/UX Design (Figma)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mainSkills" value="Project Management">
+                                <span>Project Management</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="portfolioLink">GitHub or Portfolio Link (Optional)</label>
+                        <input type="url" id="portfolioLink" name="portfolioLink"
+                            placeholder="https://github.com/yourusername">
+                        <small>Share your work to help peers find you</small>
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" id="backStep2" class="btn btn-secondary">Back</button>
+                        <button type="submit" id="registerBtn" class="btn btn-primary btn-large">Create Account</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-links">
+                <p>Already have an account? <a href="login.html">Login here</a></p>
+                <p><a href="index.html">Back to Home</a></p>
+            </div>
+
+            <div id="error-message" class="error-message" style="display:none;"></div>
+            <div id="success-message" class="success-message" style="display:none;"></div>
+            <div id="loading" class="loading" style="display:none;">Creating your account...</div>
+        </div>
+    </div>
+
+    <!-- Firebase CDN Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbf_X1WX67FhXiPJWDSLchiG6eDjR7JsM",
+            authDomain: "student-collaboration-pl-37e06.firebaseapp.com",
+            projectId: "student-collaboration-pl-37e06",
+            storageBucket: "student-collaboration-pl-37e06.firebasestorage.app",
+            messagingSenderId: "648204798579",
+            appId: "1:648204798579:web:041b586930f18dcbfc3806",
+            measurementId: "G-72358XSZVY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        console.log('✅ Firebase initialized on registration page');
+
+        // Multi-step form management
+        let currentStep = 1;
+        const studentData = {};
+
+        // College email validation [web:139][web:142]
+        function isValidCollegeEmail(email) {
+            const collegeDomains = ['.edu.in', '.ac.in', '.edu', '.college.edu.in'];
+            return collegeDomains.some(domain => email.toLowerCase().endsWith(domain));
+        }
+
+        // Email format validation [web:139][web:145]
+        function isValidEmailFormat(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Password strength validation [web:134]
+        function isValidPassword(password) {
+            return password.length >= 6;
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successMessage = document.getElementById('success-message');
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        // Show loading state
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // Step navigation
+        function showStep(stepNumber) {
+            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            currentStep = stepNumber;
+
+            // Clear messages when changing steps
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        // Step 1: Basic Account Form
+        document.getElementById('nextStep1').addEventListener('click', function () {
+            const fullName = document.getElementById('fullName').value.trim();
+            const collegeEmail = document.getElementById('collegeEmail').value.trim();
+            const rollNumber = document.getElementById('rollNumber').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation [web:134][web:139]
+            if (!fullName || fullName.length < 2) {
+                showError('Please enter your full name (at least 2 characters).');
+                return;
+            }
+
+            if (!isValidEmailFormat(collegeEmail)) {
+                showError('Please enter a valid email address.');
+                return;
+            }
+
+            if (!isValidCollegeEmail(collegeEmail)) {
+                showError('Please use your official college email address (.edu.in, .ac.in, or .edu).');
+                return;
+            }
+
+            if (!rollNumber) {
+                showError('Please enter your roll number or student ID.');
+                return;
+            }
+
+            if (!isValidPassword(password)) {
+                showError('Password must be at least 6 characters long.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showError('Passwords do not match.');
+                return;
+            }
+
+            // Store data and proceed to next step
+            studentData.fullName = fullName;
+            studentData.collegeEmail = collegeEmail;
+            studentData.rollNumber = rollNumber;
+            studentData.password = password;
+
+            showStep(2);
+        });
+
+        // Step 2: Academic Details Form
+        document.getElementById('nextStep2').addEventListener('click', function () {
+            const stream = document.getElementById('stream').value;
+            const cohort = document.getElementById('cohort').value.trim();
+            const currentYear = document.getElementById('currentYear').value;
+
+            if (!stream) {
+                showError('Please select your stream/branch of study.');
+                return;
+            }
+
+            if (!cohort || cohort.length < 2) {
+                showError('Please enter your cohort/batch name.');
+                return;
+            }
+
+            if (!currentYear) {
+                showError('Please select your current year of study.');
+                return;
+            }
+
+            // Store data and proceed to next step
+            studentData.stream = stream;
+            studentData.cohort = cohort;
+            studentData.currentYear = currentYear;
+
+            showStep(3);
+        });
+
+        // Step 3: Skills & Interests Form - Final Registration
+        document.getElementById('skillsInterestsForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Get selected skills
+            const selectedSkills = Array.from(document.querySelectorAll('input[name="mainSkills"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            const portfolioLink = document.getElementById('portfolioLink').value.trim();
+
+            if (selectedSkills.length === 0) {
+                showError('Please select at least one skill.');
+                return;
+            }
+
+            // Store final data
+            studentData.mainSkills = selectedSkills;
+            studentData.portfolioLink = portfolioLink;
+
+            showLoading(true);
+
+            try {
+                // Create Firebase user [web:90][web:134]
+                console.log('🔐 Creating Firebase user account...');
+                const userCredential = await createUserWithEmailAndPassword(
+                    auth,
+                    studentData.collegeEmail,
+                    studentData.password
+                );
+
+                const user = userCredential.user;
+                console.log('✅ Firebase user created:', user.uid);
+
+                // Send email verification [web:136]
+                await sendEmailVerification(user);
+                console.log('📧 Email verification sent');
+
+                // Create student profile in MongoDB
+                console.log('📊 Creating student profile in MongoDB...');
+                const profileData = {
+                    fullName: studentData.fullName,
+                    collegeEmail: studentData.collegeEmail,
+                    rollNumber: studentData.rollNumber,
+                    stream: studentData.stream,
+                    cohort: studentData.cohort,
+                    currentYear: studentData.currentYear,
+                    mainSkills: studentData.mainSkills,
+                    portfolioLink: studentData.portfolioLink || ''
+                };
+
+                const response = await fetch('/api/students/create-profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${await user.getIdToken()}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    console.log('✅ Student profile created in MongoDB');
+                    showSuccess('Account created successfully! Please check your email to verify your account, then login.');
+
+                    // Redirect to login after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Failed to create student profile');
+                }
+
+            } catch (error) {
+                console.error('❌ Registration error:', error);
+                showLoading(false);
+
+                let errorText = 'Registration failed. Please try again.';
+
+                // Handle specific Firebase errors [web:134]
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorText = 'An account with this email already exists. Try logging in instead.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorText = 'Invalid email address format.';
+                        break;
+                    case 'auth/weak-password':
+                        errorText = 'Password is too weak. Please choose a stronger password.';
+                        break;
+                    case 'auth/network-request-failed':
+                        errorText = 'Network error. Please check your connection and try again.';
+                        break;
+                    default:
+                        if (error.message) {
+                            errorText = error.message;
+                        }
+                }
+
+                showError(errorText);
+            }
+        });
+
+        // Back button handlers
+        document.getElementById('backStep1').addEventListener('click', () => showStep(1));
+        document.getElementById('backStep2').addEventListener('click', () => showStep(2));
+
+        // Check if user is already logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.emailVerified) {
+                console.log('👤 User already logged in, redirecting to dashboard');
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,231 @@
+/* Registration Page Specific Styles */
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.register-form {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.register-form h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.register-form h3 {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-weight: normal;
+    font-size: 1.1rem;
+}
+
+.register-form h4 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #e8f4f8;
+    padding-bottom: 10px;
+}
+
+/* Multi-step form */
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+/* Form layout */
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e8f4f8;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.form-group small {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Checkbox group */
+.checkbox-group {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #e8f4f8;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.checkbox-item:hover {
+    border-color: #3498db;
+    background-color: #f8f9fa;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 12px;
+    width: auto;
+}
+
+.checkbox-item input[type="checkbox"]:checked + span {
+    color: #3498db;
+    font-weight: 500;
+}
+
+.checkbox-item.selected {
+    border-color: #3498db;
+    background-color: #e3f2fd;
+}
+
+/* Form navigation */
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.form-navigation .btn {
+    flex: 1;
+    max-width: 200px;
+}
+
+/* Button styles */
+.btn-large {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Form links */
+.form-links {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.form-links p {
+    margin: 10px 0;
+    color: #7f8c8d;
+}
+
+.form-links a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.form-links a:hover {
+    text-decoration: underline;
+}
+
+/* Messages */
+.error-message {
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    color: #e53e3e;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.success-message {
+    background: #f0fff4;
+    border: 1px solid #c6f6d5;
+    color: #25543e;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.loading {
+    background: #e6f3ff;
+    border: 1px solid #b3d9ff;
+    color: #1e40af;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .register-form {
+        padding: 30px 20px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .form-navigation {
+        flex-direction: column;
+    }
+    
+    .form-navigation .btn {
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-container {
+        padding: 10px;
+    }
+    
+    .register-form {
+        padding: 20px 15px;
+    }
+}
